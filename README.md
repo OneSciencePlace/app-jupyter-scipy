@@ -156,11 +156,16 @@ bash tools/validate.sh app --kind web \
   --kernel-code test/kernel-code.py --by "<your name>"
 ```
 
-`test/kernel-code.py` starts a Dask cluster and imports every package. The
-record then lists Dask's listeners: the scheduler and workers (`tls://`,
-secured by app-jupyter's `50-dask-tls.sh`), the dashboard on `0.0.0.0:8787`
-(no login; NEW-19, open), and the kernels' own pipes on `127.0.0.1`. For an
-image made from this one, copy `test/kernel-code.py` and keep what it ships.
+`test/kernel-code.py` starts a Dask cluster, imports every package, and says
+which port is which (`listener <host:port> <role>` lines). `validate.sh`
+matches those to the listeners it finds and probes each from outside the
+session; the record gets a table. Expect: the Dask scheduler, nanny and worker
+refusing a client without the session's certificate (app-jupyter's
+`50-dask-tls.sh`); the dashboard on `0.0.0.0:8787` and each worker's
+`/health` and `/metrics` endpoint answering without a login (WARN; NEW-19,
+open); the kernel's own pipe (ZeroMQ, INFO). For an image made from this one,
+copy `test/kernel-code.py` and keep what it ships. `test/` is not part of the
+image.
 
 ## Files
 

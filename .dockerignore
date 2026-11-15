@@ -7,3 +7,6 @@ out/
 results/
 __pycache__/
 node_modules/
+# Not part of the image: OSP staff's validation script (a change to it must not
+# change the image's digest).
+test/
