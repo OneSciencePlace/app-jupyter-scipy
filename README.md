@@ -82,6 +82,35 @@ use on a cluster. Send them your repository's name and what you need.
 Leave the other files as they are. The `Dockerfile` does not need editing:
 everything about the session comes from the base image, `app-jupyter`.
 
+## Rules your image inherits
+
+Some things come with the base image, `app-jupyter`, and stay the same
+whatever packages you list. They are what lets many people's sessions share
+a machine safely. The build checks them, and stops with a message if one is
+broken:
+
+- **Only the person who started the session gets in.** JupyterLab sits
+  behind a gate that asks for the session's own token.
+- **The Jupyter software stays at the tested versions** (JupyterLab 4.6.3
+  and its parts). A package that needs another version stops the build (the
+  third reason in step 4).
+- **Packages come from the image only.** Kernels ignore packages installed
+  in a home directory (with `pip install --user`, or left in `~/.local` from
+  earlier work on the cluster), so a notebook finds the same packages in
+  every session, for everyone. To add a package, add it to
+  `requirements.txt`.
+- **No debugger in the kernel.** The JupyterLab debugger panel is not
+  available.
+- **Programs run with your own rights.** None can gain more, including ones
+  installed from `apt.txt`.
+- **The base image's own files stay as they are.** If a change replaces one,
+  the build stops with "files of app-jupyter were changed".
+- **Servers a notebook starts are secured where possible.** Dask's cluster
+  is set up for each session (see "What to know when using it").
+
+If one of these gets in the way of what you need, ask OSP staff: there is
+often another way to do it.
+
 ## What is in it, compared with scipy-notebook
 
 | | |
@@ -101,8 +130,8 @@ everything about the session comes from the base image, `app-jupyter`.
   session ends.
 - **Add packages to the image, not to a running session.** List them in
   `requirements.txt` and make a new release. The image is read-only while it
-  runs, and packages installed into a home directory may not work with the
-  image's own.
+  runs, and kernels ignore packages installed into a home directory (see
+  "Rules your image inherits").
 - **Dask works as usual, and is secured for you.** `Client()` and
   `LocalCluster()` start a cluster as in any tutorial. Behind the scenes the
   base image makes a certificate for each session, so no other session on the

@@ -8,7 +8,7 @@
 # Everything about the session -- the token gate, JupyterLab on a Unix socket,
 # the private session directory, Dask secured per session -- comes from the
 # base image, app-jupyter, pinned here by tag and digest.
-FROM ghcr.io/onescienceplace/app-jupyter:4.6.3-osp2@sha256:9450c8b323c6539a1139ab5571d58fe58882d1454cee432ce180b25d56dec668
+FROM ghcr.io/onescienceplace/app-jupyter:4.6.3-osp3@sha256:d38fa80f090ef7edb1cc9fe6d20d7101bd35976b110e55cfcaf8e95561972491
 
 # Your packages: requirements.txt, apt.txt (and session.d/, if you add one).
 COPY . /tmp/osp/
