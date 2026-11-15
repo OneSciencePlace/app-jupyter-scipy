@@ -1,0 +1,17 @@
+# System packages (Debian names). Most images need none: list one here only if
+# a Python package says it needs a system library or program.
+#
+# Everyday command-line tools, as in the Docker Stacks' minimal-notebook
+# (git and curl come with the base image).
+nano-tiny vim-tiny less unzip tzdata
+
+# Exporting notebooks to PDF (File > Save and Export Notebook As > PDF):
+# pandoc and TeX Live. The biggest part of the image; remove these lines if
+# you don't need PDF export.
+pandoc texlive-xetex texlive-fonts-recommended texlive-plain-generic
+
+# LaTeX in matplotlib labels (usetex) and animations (ffmpeg).
+dvipng cm-super ffmpeg
+
+# Compilers, for Cython and for pip packages that build from source.
+build-essential
